@@ -12,6 +12,9 @@ class Tile {
     this.revealed = false;
     this.flagCount = 0;
     this.neighborCount = 0;
+    this.revealedCount = 0;
+    this.unrevealedCount = 0;
+    this.playableCount = 0;
   }
 
   show() {
@@ -66,6 +69,44 @@ class Tile {
     return this.x < mouseX && mouseX < this.x + this.w && this.y < mouseY && mouseY < this.y + this.h;
   }
 
+  countPlayable() {
+    let total = 0;
+    for (let xoff = -1; xoff <= 1; xoff++) {
+      for (let yoff = -1; yoff <= 1; yoff++) {
+        let c = this.c + xoff;
+        let r = this.r + yoff;
+        if (!(xoff == 0 && yoff == 0) && c > -1 && c < board[0].length && r > -1 && r < board.length) {
+          let neighbor = board[r][c];
+          if (!neighbor.f && !neighbor.revealed) {
+            total++;
+          }
+        }
+      }
+    }
+    this.playableCount = total;
+  }
+
+  countRevealed() {
+    let total = 0;
+    let sum = 0;
+    for (let xoff = -1; xoff <= 1; xoff++) {
+      for (let yoff = -1; yoff <= 1; yoff++) {
+        let c = this.c + xoff;
+        let r = this.r + yoff;
+        if (!(xoff == 0 && yoff == 0) && c > -1 && c < board[0].length && r > -1 && r < board.length) {
+          let neighbor = board[r][c];
+          if (neighbor.revealed) {
+            total++;
+          } else {
+            sum++;
+          }
+        }
+      }
+    }
+    this.revealedCount = total;
+    this.unrevealedCount = sum;
+  }
+
   countNeighbors() {
     if (this.b) {
       this.neighborCount = -1;
@@ -76,7 +117,7 @@ class Tile {
       for (let yoff = -1; yoff <= 1; yoff++) {
         let c = this.c + xoff;
         let r = this.r + yoff;
-        if (c > -1 && c < board[0].length && r > -1 && r < board.length) {
+        if (!(xoff == 0 && yoff == 0) && c > -1 && c < board[0].length && r > -1 && r < board.length) {
           let neighbor = board[r][c];
           if (neighbor.b) {
             total++;
@@ -93,7 +134,7 @@ class Tile {
       for (let yoff = -1; yoff <= 1; yoff++) {
         let c = this.c + xoff;
         let r = this.r + yoff;
-        if (c > -1 && c < board[0].length && r > -1 && r < board.length) {
+        if (!(xoff == 0 && yoff == 0) && c > -1 && c < board[0].length && r > -1 && r < board.length) {
           let neighbor = board[r][c];
           if (neighbor.f) {
             total++;
@@ -105,6 +146,7 @@ class Tile {
   }
 
   reveal() {
+    // console.log(this);
     if (this.b) {
       gameover = true;
     }
@@ -113,6 +155,13 @@ class Tile {
     if (this.neighborCount == 0) {
       this.floodFill();
     }
+  }
+
+  update() {
+    this.countNeighbors();
+    this.countRevealed();
+    this.countPlayable();
+    this.countFlags();
   }
 
   floodFill() {
