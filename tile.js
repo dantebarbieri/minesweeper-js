@@ -9,6 +9,7 @@ class Tile {
     this.h = h;
     this.b = false;
     this.f = false;
+    this.pickedBomb = false;
     this.revealed = false;
     this.flagCount = 0;
     this.neighborCount = 0;
@@ -24,7 +25,7 @@ class Tile {
     if (this.revealed) {
       switch (this.neighborCount) {
         case -1:
-          fill(255, 0, 0);
+          this.pickedBomb ? fill(255) : fill(255, 0, 0);
           ellipse(this.x + this.w / 2, this.y + this.h / 2, this.w / 2, this.h / 2);
           break;
         case 0:
@@ -148,6 +149,7 @@ class Tile {
   reveal() {
     // console.log(this);
     if (this.b) {
+      this.pickedBomb = true;
       gameover = true;
     }
     this.revealed = true;

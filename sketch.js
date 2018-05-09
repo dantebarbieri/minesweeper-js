@@ -1,6 +1,7 @@
 const num_rows = 16;
 const num_cols = 30;
 const num_mines = 99;
+let num_flags;
 let robbie;
 let cellSize;
 let board;
@@ -24,6 +25,7 @@ function setup() {
   gameover = false;
   win = false;
   cheats = false;
+  numFlags = 0;
   // frameRate(1);
 }
 
@@ -102,6 +104,11 @@ function mousePressed() {
     }
   } else if (mouseButton == RIGHT) {
     if (!board[r][c].revealed) {
+      if (board.f) {
+        num_flags--;
+      } else {
+        num_flags++;
+      }
       board[r][c].f = !board[r][c].f;
       for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[i].length; j++) {

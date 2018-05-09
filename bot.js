@@ -14,12 +14,10 @@ class Bot {
   }
 
   select() {
-    let selected = false;
     for (let i = 0; i < board.length; i++) {
       for (let j = 0; j < board[i].length; j++) {
         if (board[i][j].revealed) {
           if (board[i][j].playableCount > 0 && board[i][j].flagCount == board[i][j].neighborCount) {
-            selected = true;
             for (let xoff = -1; xoff <= 1; xoff++) {
               for (let yoff = -1; yoff <= 1; yoff++) {
                 let c = j + xoff;
@@ -41,7 +39,6 @@ class Bot {
             }
           }
           if (board[i][j].playableCount == board[i][j].neighborCount - board[i][j].flagCount) {
-            selected = true;
             for (let xoff = -1; xoff <= 1; xoff++) {
               for (let yoff = -1; yoff <= 1; yoff++) {
                 let c = j + xoff;
@@ -49,6 +46,7 @@ class Bot {
                 if (c > -1 && c < board[0].length && r > -1 && r < board.length) {
                   if (!board[r][c].f && !board[r][c].revealed) {
                     board[r][c].f = true;
+                    num_flags++;
                     return;
                   }
                 }
