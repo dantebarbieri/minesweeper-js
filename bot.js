@@ -40,7 +40,7 @@ class Bot {
               }
             }
           }
-          if (board[i][j].playableCount == board[i][j].neighborCount) {
+          if (board[i][j].playableCount == board[i][j].neighborCount - board[i][j].flagCount) {
             selected = true;
             for (let xoff = -1; xoff <= 1; xoff++) {
               for (let yoff = -1; yoff <= 1; yoff++) {
@@ -58,5 +58,21 @@ class Bot {
         }
       }
     }
+    let r;
+    let c;
+    do {
+      r = int(random(board.length));
+      c = int(random(board[r].length));
+    } while (board[r][c].revealed || board[r][c].f);
+    if (cheats) {
+      if (!board[r][c].b) {
+        board[r][c].reveal();
+        return;
+      }
+    } else {
+      board[r][c].reveal();
+      return;
+    }
+    return;
   }
 }

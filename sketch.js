@@ -6,6 +6,7 @@ let cellSize;
 let board;
 let generated;
 let gameover;
+let win;
 let cheats;
 
 function setup() {
@@ -21,7 +22,8 @@ function setup() {
   robbie = new Bot();
   generated = false;
   gameover = false;
-  cheats = true;
+  win = false;
+  cheats = false;
   // frameRate(1);
 }
 
@@ -33,8 +35,14 @@ function draw() {
         board[i][j].revealed = true;
       }
     }
+  }
+  if (win) {
+    noLoop();
   } else {
-    robbie.select();
+    checkWin();
+    if (!win) {
+      robbie.select();
+    }
   }
   background(0);
   for (let col of board) {
@@ -43,6 +51,21 @@ function draw() {
       tile.show();
     }
   }
+}
+
+function checkWin() {
+  let w = true;
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      if (!board[i][j].revealed && !board[i][j].b) {
+        w = false;
+      }
+    }
+  }
+  if (w) {
+    win = true;
+  }
+  return;
 }
 
 function mousePressed() {
