@@ -58,18 +58,39 @@ class Bot {
     }
     let r;
     let c;
+    let exit = false;
     do {
       r = int(random(board.length));
       c = int(random(board[r].length));
-    } while (board[r][c].revealed || board[r][c].f);
-    if (cheats) {
-      if (!board[r][c].b) {
+      exit = random(1) < 0.1;
+    } while ((board[r][c].revealed || board[r][c].f || board[r][c].revealedCount == 0 || board[r][c].flagCount == 0) && !exit);
+    if (!exit) {
+      if (cheats) {
+        if (!board[r][c].b) {
+          board[r][c].reveal();
+          return;
+        }
+      } else {
         board[r][c].reveal();
         return;
       }
-    } else {
-      board[r][c].reveal();
-      return;
+    }
+    exit = false;
+    do {
+      r = int(random(board.length));
+      c = int(random(board[r].length));
+      exit = random(1) < 0.1;
+    } while ((board[r][c].revealed || board[r][c].f || board[r][c].revealedCount == 0) && !exit);
+    if (!exit) {
+      if (cheats) {
+        if (!board[r][c].b) {
+          board[r][c].reveal();
+          return;
+        }
+      } else {
+        board[r][c].reveal();
+        return;
+      }
     }
     return;
   }

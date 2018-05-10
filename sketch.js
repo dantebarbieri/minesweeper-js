@@ -9,6 +9,9 @@ let generated;
 let gameover;
 let win;
 let cheats;
+let index;
+let row;
+let col;
 
 function setup() {
   window.addEventListener("contextmenu", function(e) {
@@ -26,21 +29,32 @@ function setup() {
   win = false;
   cheats = false;
   numFlags = 0;
-  // frameRate(1);
+  index = 0;
+  row = 0;
+  col = 0;
+  // frameRate(3);
 }
 
 function draw() {
-  if (gameover) {
-    noLoop();
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board[i].length; j++) {
-        board[i][j].revealed = true;
-      }
+  if (gameover || win) {
+    if (row < board.length) {
+      let rev;
+      do {
+        rev = board[row][col].revealed;
+        board[row][col].revealed = true;
+        col++;
+        if (row < board.length && col >= board[row].length) {
+          row++;
+          col = 0;
+        }
+      } while (rev);
     }
-  }
-  if (win) {
-    noLoop();
+    if (index >= board.length * board[0].length) {
+      noLoop();
+    }
+    index++;
   } else {
+    index = 0;
     checkWin();
     if (!win) {
       robbie.select();

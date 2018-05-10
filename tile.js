@@ -25,7 +25,7 @@ class Tile {
     if (this.revealed) {
       switch (this.neighborCount) {
         case -1:
-          this.pickedBomb ? fill(255) : fill(255, 0, 0);
+          this.pickedBomb ? fill(255) : this.f ? fill(0, 0, 0) : fill(255, 0, 0);
           ellipse(this.x + this.w / 2, this.y + this.h / 2, this.w / 2, this.h / 2);
           break;
         case 0:
@@ -52,7 +52,7 @@ class Tile {
           fill(200, 100, 200);
           break;
         case 8:
-          fill(100, 200, 100);
+          fill(200, 200, 200);
           break;
         default:
           break;
